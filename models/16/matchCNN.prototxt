@@ -1,0 +1,210 @@
+name: "matching_pair"
+layer {
+  name: "pair_data"
+  type: "Data"
+  top: "pair_data"
+  top: "sim"
+  include { phase: TRAIN }
+  transform_param {
+    scale: 0.00390625
+  }
+  data_param {
+    source: "/data_new/matchingcnn/train/train_dataset_shuffle_16_lmdb"
+    batch_size: 100
+    backend: LMDB    
+  }
+}
+
+layer {
+  name: "pair_data"
+  type: "Data"
+  top: "pair_data"
+  top: "sim"
+  include { phase: TEST }
+  transform_param {
+    scale: 0.00390625
+  }
+  data_param {
+    source: "/data_new/matchingcnn/validation/validation_dataset_shuffle_16_lmdb"
+    batch_size: 20
+    backend: LMDB    
+  }
+}
+
+layer {
+  name: "slice_pair"
+  type: "Slice"
+  bottom: "pair_data"
+  top: "data_source"
+  top: "data_target"
+  slice_param {
+    slice_dim: 1
+    slice_point: 1
+  }
+}
+
+################################################# 
+#           SOURCE 
+#################################################
+
+layer {
+  name: "conv1_s"
+  type: "Convolution"
+  bottom: "data_source"
+  top: "conv1_s"
+  param {
+    name: "conv1_w"
+    lr_mult: 1
+  }
+  param {
+    name: "conv1_b"
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 16
+    kernel_size: 4
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+
+
+layer {
+  name: "pool1_s"
+  type: "Pooling"
+  bottom: "conv1_s"
+  top: "pool1_s"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 1
+  }
+}
+
+
+layer {
+  name: "ip1_s"
+  type: "InnerProduct"
+  bottom: "pool1_s"
+  top: "ip1_s"
+  param {
+    name: "ip1_w"
+    lr_mult: 1
+  }
+  param {
+    name: "ip1_b"
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 256
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+
+
+
+################################################# 
+#           TARGET 
+#################################################
+
+
+layer {
+  name: "conv1_t"
+  type: "Convolution"
+  bottom: "data_target"
+  top: "conv1_t"
+  param {
+    name: "conv1_w"
+    lr_mult: 1
+  }
+  param {
+    name: "conv1_b"
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 16
+    kernel_size: 4
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+
+
+layer {
+  name: "pool1_t"
+  type: "Pooling"
+  bottom: "conv1_t"
+  top: "pool1_t"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 1
+  }
+}
+
+
+layer {
+  name: "ip1_t"
+  type: "InnerProduct"
+  bottom: "pool1_t"
+  top: "ip1_t"
+  param {
+    name: "ip1_w"
+    lr_mult: 1
+  }
+  param {
+    name: "ip1_b"
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 256
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+
+
+
+################################################# 
+#           ACCURACY
+#################################################
+
+
+################################################# 
+#           LOSS FUNCTION CONTRASTIVE 
+#################################################
+
+layer {
+    name: "loss"
+    type: "ContrastiveLoss"
+    contrastive_loss_param {
+        margin: 1.0
+    }
+    bottom: "ip1_s"
+    bottom: "ip1_t"
+    bottom: "sim"
+    top: "loss"
+}
