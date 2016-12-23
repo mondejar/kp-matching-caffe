@@ -11,7 +11,7 @@ keypoints and crop them. Next we generate some random transformations for each p
 using [create_image_dataset](https://github.com/mondejar/create_image_dataset).
 
 A great way to work with Caffe is using LMDB files. To convert out previous dataset to LMDB files we adapt the file 
-*caffe/tools/convert_imageset.cpp* to store two images and the label 1 (if both images are extracted from the same keypoint) or 0 (if not).
+*caffe/tools/convert_imageset.cpp* to store two images and a label 1 (if both images are extracted from the same keypoint) or 0 (if not) per instance.
 
 Convolutional neural network structure
 --------------------------------------
