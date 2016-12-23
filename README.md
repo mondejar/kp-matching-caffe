@@ -2,7 +2,6 @@
 
 Repository to train a convolutional neural network to be able to predict 
 if two patches given correspond to the same keypoint (under different changes) or not.  
-(imagen descriptiva)
 
 How to use
 ----------
@@ -16,7 +15,8 @@ A great way to work with Caffe is using LMDB files. To convert out previous data
 
 Convolutional neural network structure
 --------------------------------------
-In */models/16/matchCNN.prototxt* we define our network structure. We create a siamese CNN which given two images of 16x16 pixels return a prediction [0,1]. The model contains two branches of:
+In [matchCNN.prototxt](https://github.com/mondejar/kp_matching_caffe/blob/master/models/16/matchCNN.prototxt)
+we define our network structure. We create a siamese CNN which given two images of 16x16 pixels return a prediction [0,1]. The model contains two branches of:
 
 <li> 1 convolutional layer </li>
 ```
@@ -103,7 +103,8 @@ layer {
 }
 ```
 
-In */models/16/solver.prototxt* we define the learning params of the network. 
+In [solver.prototxt](https://github.com/mondejar/kp_matching_caffe/blob/master/models/16/solver.prototxt)
+we define the learning params of the network. 
 
 
 Evaluating the net
@@ -120,17 +121,14 @@ For that purpose we use the  [oxford dataset](http://www.robots.ox.ac.uk/~vgg/re
 Results
 -------
 
-(grafica comparando con descriptores css? para pasar el raton y que se vea chulo...)
-
-
-(imagen)
-
 
 
 Requirements
 ------------
-<ul>
-<li> CUDA (optional) </li>
-<li> Caffe </li>
-<li> OpenCV </li>
-</ul>
+
+[CUDA](http://www.nvidia.es/object/cuda-parallel-computing-es.html) (optional) 
+
+[Caffe](https://github.com/BVLC/caffe)
+
+[OpenCV](http://opencv.org/)
+
