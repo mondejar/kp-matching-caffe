@@ -114,7 +114,7 @@ To train our model we just run:
 ./models/16/train_matchCNN.sh 
 ```
 
-Once the training has completed. We evaluate the results of our trained CNN model against the well-know descriptor SIFT. 
+Once the training has completed. We evaluate the results of our trained CNN model against the well-known descriptor SIFT. 
 For that purpose we use the  [oxford dataset](http://www.robots.ox.ac.uk/~vgg/research/affine/).
 
 
