@@ -17,7 +17,91 @@ A great way to work with Caffe is using LMDB files. To convert out previous data
 
 Convolutional neural network structure
 --------------------------------------
-In */models/16/matchCNN.prototxt* we define our network shape. We create a siamese CNN with 1 convolutional layer follow by 1 pooling layer and 1 full connected. Finally the loss is computed with a ContrastiveLoss layer that give the final prediction.
+In */models/16/matchCNN.prototxt* we define our network shape. We create a siamese CNN with 
+<li> 1 convolutional layer </li>
+```
+layer {
+  name: "conv1_s"
+  type: "Convolution"
+  bottom: "data_source"
+  top: "conv1_s"
+  param {
+    name: "conv1_w"
+    lr_mult: 1
+  }
+  param {
+    name: "conv1_b"
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 16
+    kernel_size: 4
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+```
+<li>followed by 1 pooling layer </li>
+```
+layer {
+  name: "pool1_s"
+  type: "Pooling"
+  bottom: "conv1_s"
+  top: "pool1_s"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 1
+  }
+}
+```
+<li>and 1 full connected</li>
+```
+layer {
+  name: "ip1_s"
+  type: "InnerProduct"
+  bottom: "pool1_s"
+  top: "ip1_s"
+  param {
+    name: "ip1_w"
+    lr_mult: 1
+  }
+  param {
+    name: "ip1_b"
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 256
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+```
+<li>Finally the loss is computed with a ContrastiveLoss layer that give the final prediction.</li>
+```
+layer {
+    name: "loss"
+    type: "ContrastiveLoss"
+    contrastive_loss_param {
+        margin: 1.0
+    }
+    bottom: "ip1_s"
+    bottom: "ip1_t"
+    bottom: "sim"
+    top: "loss"
+}
+```
 
 In */models/16/solver.prototxt* we define the learning params of the network. 
 
