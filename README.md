@@ -8,7 +8,7 @@ How to use
 
 First of all to generate the dataset for training we use images from MIRFLICKR-25000. Then we extract several
 keypoints and crop them. Next we generate some random transformations for each patch and label them with the same class
-using [create_image_dataset](https://github.com/mondejar/create_image_dataset)
+using [create_image_dataset](https://github.com/mondejar/create_image_dataset).
 
 A great way to work with Caffe is using LMDB files. To convert out previous dataset to LMDB files we adapt the file 
 *caffe/tools/convert_imageset.cpp* to store two images and the label 1 (if both images are extracted from the same keypoint) or 0 (if not).
@@ -120,7 +120,12 @@ For that purpose we use the  [oxford dataset](http://www.robots.ox.ac.uk/~vgg/re
 
 Results
 -------
+The next table shows the best F-measure obtained by our trained CNN model and the SIFT descriptor.
 
+|            | bark | bikes | boat | graf | leuven | trees | ubc  | wall |
+|------------|------|-------|------|------|--------|-------|------|------|
+| CNN 16x16  | **0.78** | **0.79**  |**0.73** | **0.70** | 0.58   | **0.68**  | **0.67** | 0.66 |
+| SIFT 32x32 | 0.66 | 0.68  | 0.66 | 0.68 | **0.68**   | 0.66  | 0.66 | 0.66 |
 
 
 Requirements
