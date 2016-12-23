@@ -8,16 +8,16 @@ How to use
 ----------
 
 First of all to generate the dataset for training we use images from MIRFLICKR-25000. Then we extract several
-
 keypoints and crop them. Next we generate some random transformations for each patch and label them with the same class
-using (https://github.com/mondejar/create_image_dataset/)
+using [create_image_dataset](https://github.com/mondejar/create_image_dataset)
 
 A great way to work with Caffe is using LMDB files. To convert out previous dataset to LMDB files we adapt the file 
-*caffe/tools/convert_imageset.cpp* to store two images and the label 1 (if both images are extracted from the same keypoint) or 0 (if not ).
+*caffe/tools/convert_imageset.cpp* to store two images and the label 1 (if both images are extracted from the same keypoint) or 0 (if not).
 
 Convolutional neural network structure
 --------------------------------------
-In */models/16/matchCNN.prototxt* we define our network shape. We create a siamese CNN with 
+In */models/16/matchCNN.prototxt* we define our network structure. We create a siamese CNN which given two images of 16x16 pixels return a prediction [0,1]. The model contains two branches of:
+
 <li> 1 convolutional layer </li>
 ```
 layer {
@@ -108,8 +108,13 @@ In */models/16/solver.prototxt* we define the learning params of the network.
 
 Evaluating the net
 ------------------
-We evaluate the results of our trained CNN model against the well-know descriptor SIFT. 
-For that we use the oxford dataset 
+To train our model we just run:
+```
+./models/16/train_matchCNN.sh 
+```
+
+Once the training has completed. We evaluate the results of our trained CNN model against the well-know descriptor SIFT. 
+For that purpose we use the  [oxford dataset](http://www.robots.ox.ac.uk/~vgg/research/affine/).
 
 
 Results
