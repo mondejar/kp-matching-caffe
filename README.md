@@ -19,6 +19,7 @@ In [matchCNN.prototxt](https://github.com/mondejar/kp_matching_caffe/blob/master
 we define our network structure. We create a siamese CNN which given two images of 16x16 pixels return a prediction [0,1]. The model contains two branches of:
 
 <li> 1 convolutional layer </li>
+
 ```
 layer {
   name: "conv1_s"
@@ -47,7 +48,9 @@ layer {
   }
 }
 ```
+
 <li>followed by 1 pooling layer </li>
+
 ```
 layer {
   name: "pool1_s"
@@ -61,7 +64,9 @@ layer {
   }
 }
 ```
+
 <li>and 1 full connected</li>
+
 ```
 layer {
   name: "ip1_s"
@@ -87,8 +92,10 @@ layer {
     }
   }
 }
+
 ```
 <li>Finally the loss is computed with a ContrastiveLoss layer that give the final prediction.</li>
+
 ```
 layer {
     name: "loss"
